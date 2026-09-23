@@ -27,38 +27,50 @@ function App() {
 
   return (
     <div className="page">
-      <header>
-        <h1>오늘의 체육수업 (연습용)</h1>
-        <p>영상 활동을 필터로 찾고, 선택하면 해당 구간부터 재생됩니다.</p>
+      <header className="hero">
+        <div className="hero-top">
+          <div>
+            <h1>오늘의 체육수업 <span className="badge">연습용</span></h1>
+            <p className="subtitle">학교스포츠클럽 · 체육수업 영상 콘텐츠 허브</p>
+          </div>
+          <div className="stats">
+            <span>{activities.length}개 활동</span>
+          </div>
+        </div>
+
+        <div className="filters">
+          <select onChange={(e) => setFilters((f) => ({ ...f, school_level: e.target.value }))}>
+            <option value="">학교급 전체</option>
+            <option value="초등">초등</option>
+            <option value="중등">중등</option>
+            <option value="고등">고등</option>
+          </select>
+          <select onChange={(e) => setFilters((f) => ({ ...f, place: e.target.value }))}>
+            <option value="">장소 전체</option>
+            <option value="체육관">체육관</option>
+            <option value="운동장">운동장</option>
+            <option value="교실">교실</option>
+          </select>
+        </div>
       </header>
 
-      <div className="filters">
-        <select onChange={(e) => setFilters((f) => ({ ...f, school_level: e.target.value }))}>
-          <option value="">학교급 전체</option>
-          <option value="초등">초등</option>
-          <option value="중등">중등</option>
-          <option value="고등">고등</option>
-        </select>
-        <select onChange={(e) => setFilters((f) => ({ ...f, place: e.target.value }))}>
-          <option value="">장소 전체</option>
-          <option value="체육관">체육관</option>
-          <option value="운동장">운동장</option>
-          <option value="교실">교실</option>
-        </select>
-      </div>
-
       {loading ? (
-        <p>불러오는 중...</p>
+        <p className="status-text">불러오는 중...</p>
       ) : (
         <div className="grid">
           {activities.map((a) => (
             <div key={a.id} className="card" onClick={() => setSelected(a)}>
-              <h3>{a.title}</h3>
-              <p>{a.school_level} · {a.place} · {a.duration_min}분</p>
-              <p className="equipment">준비물: {a.equipment || '없음'}</p>
+              <div className="thumb">
+                <span className="play">▶</span>
+              </div>
+              <div className="card-body">
+                <span className="tag">{a.school_level} · {a.place}</span>
+                <h3>{a.title}</h3>
+                <p className="meta">{a.duration_min}분 · 준비물: {a.equipment || '없음'}</p>
+              </div>
             </div>
           ))}
-          {activities.length === 0 && <p>조건에 맞는 활동이 없어요.</p>}
+          {activities.length === 0 && <p className="status-text">조건에 맞는 활동이 없어요.</p>}
         </div>
       )}
 
